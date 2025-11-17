@@ -14,13 +14,14 @@
 
   <!-- Register Service Worker (Correct Way) -->
   <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .catch(console.error);
-      });
-    }
-  </script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/service-worker.js", { scope: "/" })
+        .catch(console.error);
+    });
+  }
+</script>
 
   <!-- Supabase session redirect -->
   <script type="module">
@@ -28,7 +29,7 @@
 
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
-      window.location.href = "/apps/auth/auth.html";
+      window.location.href = "/auth.html";
     }
   </script>
 </head>
