@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Expenses • Toolkit</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="expense-orb orb-left" aria-hidden="true"></div>
+  <div class="expense-orb orb-right" aria-hidden="true"></div>
+  <main class="expense-root">
+    <header class="expense-hero" role="banner">
+      <div>
+        <p class="eyebrow">Toolkit OS • Finance Console</p>
+        <h1>Visualize every rupee</h1>
+        <p class="hero-subtitle">Glass dashboard crafted with Apple-grade motion and Linear clarity.</p>
+      </div>
+      <div class="hero-pill">
+        <span aria-hidden="true">⚡</span>
+        Instant ledger updates
+      </div>
+    </header>
+
+    <section class="expense-grid">
+      <div class="control-stack" role="search">
+        <label for="searchInput">Search ledger</label>
+        <div class="input-shell">
+          <input id="searchInput" placeholder="Search expenses..." aria-label="Search expenses" />
+        </div>
+      </div>
+      <div class="control-stack">
+        <label for="categoryFilter">Filter category</label>
+        <div class="input-shell select-shell">
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="all">All</option>
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Shopping</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="composer-card" aria-label="Add expense form">
+        <label>Log spend</label>
+        <div class="composer-grid">
+          <input id="title" placeholder="Title" aria-label="Expense title" />
+          <input id="amount" type="number" placeholder="Amount" aria-label="Expense amount" inputmode="decimal" />
+          <select id="category" aria-label="Expense category">
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Shopping</option>
+            <option>Other</option>
+          </select>
+          <button id="addBtn" type="button">Add</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="metrics-panel" aria-label="Expense metrics">
+      <article class="metric-card">
+        <p>Total spend</p>
+        <span id="totalExp" aria-live="polite">0</span>
+      </article>
+      <article class="metric-card">
+        <p>Entries</p>
+        <span id="expenseCount" aria-live="polite">0</span>
+      </article>
+    </section>
+
+    <section class="ledger-panel" aria-label="Expense list">
+      <header>
+        <div>
+          <h2>Spend timeline</h2>
+          <p class="muted">Beautifully layered list with instant Supabase sync</p>
+        </div>
+      </header>
+      <ul id="list" class="expenses-list" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

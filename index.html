@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Toolkit — To-Do & Expense</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <script type="module">
+    import { supabase } from "./supabaseClient.js";
+
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
+      window.location.href = "/apps/auth/auth.html";
+    }
+  </script>
+</head>
+
+<body>
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <main class="spa-root">
+
+    <!-- HOME SCREEN -->
+    <section id="home" class="home-screen">
+      <div class="glass-wrapper" role="region" aria-label="Personal hub overview">
+
+        <!-- Greeting + Clock -->
+        <div class="top-row">
+          <div class="greeting-col">
+            <div id="greeting" class="greeting" aria-live="polite">Good Evening</div>
+            <div id="username" class="username" aria-live="polite">Loading…</div>
+          </div>
+
+          <div class="clock-col">
+            <div id="dateDisplay" class="date-display" aria-live="polite">—</div>
+            <div id="timeDisplay" class="time-display" aria-live="polite">—</div>
+          </div>
+        </div>
+
+        <header class="home-header">
+          <h1 class="brand">Your Toolkit</h1>
+          <p class="subtitle">Smooth • Clean • Premium</p>
+        </header>
+
+        <!-- Notes + Activity -->
+        <div class="controls-row">
+
+          <div class="notes" role="region" aria-labelledby="notesHeading">
+            <h3 id="notesHeading">Quick Notes</h3>
+            <textarea
+              id="notesInput"
+              class="notes-input"
+              rows="3"
+              placeholder="Write something..."
+              aria-describedby="notesCount"
+              aria-label="Personal notes input"
+            ></textarea>
+            <div class="notes-actions">
+              <button id="notesClear" class="btn small" type="button">Clear</button>
+              <span id="notesCount" aria-live="polite">0 characters</span>
+            </div>
+          </div>
+
+          <div class="activity" role="region" aria-labelledby="activityHeading">
+            <div class="activity-header">
+              <h3 id="activityHeading">Recent Activity</h3>
+              <button id="activityClear" class="btn small" type="button">Clear</button>
+            </div>
+            <div id="activityFeed" class="activity-feed" aria-live="polite"></div>
+          </div>
+
+        </div>
+
+        <!-- App Tiles -->
+        <div class="tiles premium-grid">
+
+          <button class="tile glass-tile" data-app="todo" type="button" aria-label="Open To-Do App" title="Open To-Do App">
+            <div class="tile-inner">
+              <div class="tile-icon" aria-hidden="true">📝</div>
+              <div class="tile-title">To-Do App</div>
+              <div class="tile-desc">Organize tasks</div>
+            </div>
+          </button>
+
+          <button class="tile glass-tile" data-app="expense" type="button" aria-label="Open Expense Tracker" title="Open Expense Tracker">
+            <div class="tile-inner">
+              <div class="tile-icon" aria-hidden="true">💰</div>
+              <div class="tile-title">Expense Tracker</div>
+              <div class="tile-desc">Track spending</div>
+            </div>
+          </button>
+
+        </div>
+
+        <footer class="home-foot">
+          <small aria-label="Attribution">✨ Made by Rudresh ✨</small>
+          <button id="logoutBtn" class="btn tiny" type="button">Logout</button>
+        </footer>
+
+      </div>
+    </section>
+
+    <!-- FULL APP VIEW -->
+    <section id="app-view" class="app-view hidden">
+      <iframe id="app-frame" class="app-frame"></iframe>
+      <button id="backBtn" class="back-btn" type="button" aria-label="Back to dashboard">← Back</button>
+    </section>
+
+    <div id="loader" class="loader hidden" role="status" aria-live="assertive">Loading…</div>
+
+  </main>
+
+  <script type="module" src="home.js"></script>
+  <script type="module" src="router.js"></script>
+</body>
+</html>

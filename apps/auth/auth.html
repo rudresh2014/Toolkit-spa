@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login • Toolkit</title>
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+  <div class="auth-wrapper">
+    <section class="showcase" aria-hidden="true">
+      <div class="badge">Toolkit OS</div>
+      <h1>Access the command suite</h1>
+      <p>Securely authenticate into the merged workspace crafted with Apple-grade polish.</p>
+      <div class="hero-pill">
+        <span>🔐</span>
+        Supabase secure session
+      </div>
+    </section>
+
+    <div class="glass-card">
+      <div class="header">
+        <h2 id="form-title">Welcome</h2>
+        <p id="form-sub">Login to continue</p>
+      </div>
+
+      <div class="form">
+        <input id="email" type="email" placeholder="Email" autocomplete="username" />
+        <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+        <input id="name" type="text" placeholder="Display name (for signup)" class="hidden" />
+
+        <button id="submitBtn">Login</button>
+
+        <p class="switch" id="signupPrompt">
+          Don't have an account? <span id="goSignup" class="link-like">Sign up</span>
+        </p>
+
+        <p class="switch hidden" id="backToLogin">
+          Already have an account? <span id="goLogin" class="link-like">Login</span>
+        </p>
+
+        <p class="notice" id="notice" style="display:none"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="auth.js"></script>
+</body>
+</html>

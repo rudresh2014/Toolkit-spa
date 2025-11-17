@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>To-Do • Toolkit</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="todo-orb orb-one" aria-hidden="true"></div>
+  <div class="todo-orb orb-two" aria-hidden="true"></div>
+  <main class="todo-root">
+    <section class="todo-hero" role="banner">
+      <div>
+        <p class="eyebrow">Toolkit OS • Focus Suite</p>
+        <h1>Command your day</h1>
+        <p class="hero-subtitle">Curate, prioritize, and flow through tasks with a Linear-grade cockpit.</p>
+      </div>
+      <div class="hero-pill">
+        <span class="indicator online"></span>
+        Real-time sync enabled
+      </div>
+    </section>
+
+    <section class="control-grid" aria-label="Task controls">
+      <div class="control-panel" role="search">
+        <label for="searchInput">Search workspace</label>
+        <div class="input-shell">
+          <span aria-hidden="true">⌘K</span>
+          <input id="searchInput" placeholder="Search tasks..." aria-label="Search tasks" />
+        </div>
+      </div>
+      <div class="control-panel">
+        <label for="prioritySelect">Default priority</label>
+        <div class="input-shell select-shell">
+          <select id="prioritySelect" aria-label="Default priority for new task">
+            <option>Medium</option>
+            <option>Low</option>
+            <option>High</option>
+          </select>
+        </div>
+      </div>
+      <div class="composer-panel" aria-label="Add task form">
+        <label for="taskInput">Quick add</label>
+        <div class="composer-row">
+          <input id="taskInput" placeholder="Add a new task..." aria-label="Task name" />
+          <button id="addBtn" type="button">Add</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="filters-panel" aria-label="Task filters">
+      <div class="filter-buttons" role="group" aria-label="Filter tasks">
+        <button class="filter-btn active" data-filter="all" type="button" aria-pressed="true">All</button>
+        <button class="filter-btn" data-filter="active" type="button" aria-pressed="false">Active</button>
+        <button class="filter-btn" data-filter="completed" type="button" aria-pressed="false">Completed</button>
+      </div>
+      <button id="clearCompletedBtn" class="btn ghost hidden" type="button">Clear Completed</button>
+    </section>
+
+    <section class="metrics-grid" aria-label="Task metrics">
+      <article class="metric-card">
+        <p>Total tasks</p>
+        <span id="totalTasks" aria-live="polite">0</span>
+      </article>
+      <article class="metric-card">
+        <p>Completed</p>
+        <span id="completedTasks" aria-live="polite">0</span>
+      </article>
+      <article class="metric-card">
+        <p>Completion rate</p>
+        <span id="completionRate" aria-live="polite">0%</span>
+      </article>
+    </section>
+
+    <section class="list-panel" aria-label="Task list">
+      <header>
+        <div>
+          <h2>Active queue</h2>
+          <p class="muted">Tasks sync instantly across Toolkit</p>
+        </div>
+      </header>
+      <ul id="taskList" class="task-list" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
