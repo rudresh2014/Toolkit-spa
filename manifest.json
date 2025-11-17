@@ -1,16 +1,15 @@
 {
-  "name": "Toolkit",
+  "name": "Toolkit OS",
   "short_name": "Toolkit",
-  "start_url": "/",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#0b1020",
-  "description": "Smooth • Clean • Premium Toolkit App",
   "icons": [
     {
       "src": "/assets/icon.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
