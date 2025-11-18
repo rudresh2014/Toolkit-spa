@@ -214,4 +214,17 @@
        localStorage.setItem("lastActivityDate", today);
      }
    })();
+
+   /* ============================
+      LISTEN FOR ACTIVITY FROM CHILD APPS (iframes)
+      ============================ */
+
+   window.addEventListener("message", (e) => {
+     // Security: only accept messages from same origin
+     const data = e.data || {};
+     
+     if (data?.type === "activity") {
+       addActivity(data.text, data.icon || "✨");
+     }
+   });
    

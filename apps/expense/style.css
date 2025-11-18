@@ -56,7 +56,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  animation: fade-slide var(--motion-mid) var(--ease-soft);
+  animation: pageEnter 500ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+  will-change: transform, opacity;
+  transition: all 300ms var(--ease-soft);
 }
 
 .expense-hero {
@@ -110,11 +112,21 @@ body {
   padding: 18px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
-  background: rgba(6, 9, 24, 0.88);
+  background: linear-gradient(135deg, rgba(6, 9, 24, 0.95), rgba(5, 8, 18, 0.88));
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: all 200ms var(--ease-soft);
+  will-change: transform, box-shadow;
+  backdrop-filter: blur(10px);
+}
+
+.control-stack:hover,
+.composer-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm), 0 0 30px rgba(123, 245, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 .control-stack label,
@@ -178,12 +190,24 @@ body {
   color: #030409;
   font-weight: 700;
   cursor: pointer;
-  transition: transform var(--motion-fast) var(--ease-snappy), box-shadow var(--motion-fast) var(--ease-soft);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 20px 40px rgba(121, 246, 255, 0.3);
+  will-change: transform, box-shadow;
 }
 
-.composer-grid button:hover {
+.composer-grid button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 55px rgba(121, 246, 255, 0.45);
+}
+
+.composer-grid button:active:not(:disabled) {
   transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(121, 246, 255, 0.2);
+}
+
+.composer-grid button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .metrics-panel {
@@ -260,10 +284,24 @@ body {
   padding: 14px 16px;
   border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
-  animation: stagger var(--motion-mid) var(--ease-soft);
+  animation: stagger 400ms cubic-bezier(0.25, 0.8, 0.3, 1);
   animation-fill-mode: both;
+  transition: all 200ms var(--ease-soft);
+  will-change: transform, box-shadow, background;
+  backdrop-filter: blur(10px);
+}
+
+.expense-item-wrapper:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px rgba(123, 245, 255, 0.15), 0 16px 34px rgba(0, 0, 0, 0.35);
+  border-color: rgba(123, 245, 255, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+}
+
+.expense-item-wrapper:active {
+  transform: translateY(-1px);
 }
 
 .expense-item-wrapper:nth-child(1) { animation-delay: 60ms; }
@@ -299,12 +337,17 @@ body {
   font-size: 1.3rem;
   padding: 4px;
   border-radius: var(--radius-sm);
-  transition: color var(--motion-fast) var(--ease-soft), transform var(--motion-fast) var(--ease-soft);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: color, transform;
 }
 
 .delete-btn:hover {
   color: var(--color-danger);
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.1);
+}
+
+.delete-btn:active {
+  transform: translateY(0) scale(0.95);
 }
 
 .hidden {
@@ -343,6 +386,38 @@ button:focus-visible {
 }
 
 @keyframes stagger {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(16px) scale(0.96);
+    filter: blur(4px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes expenseDelete {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8);
+  }
 }

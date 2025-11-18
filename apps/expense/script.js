@@ -1,5 +1,16 @@
-// apps/expense/script.js
+// apps/expense/script.js — Premium expense tracker with smooth animations
 import { supabase } from '../../supabaseClient.js';
+
+// Helper to send activity to parent home page
+function reportActivity(text, icon = "💰") {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({
+      type: "activity",
+      text,
+      icon
+    }, "*");
+  }
+}
 
 const titleInput = document.getElementById("title");
 const amountInput = document.getElementById("amount");
@@ -32,21 +43,42 @@ async function loadExpensesFromSupabase(){
 loadExpensesFromSupabase();
 render();
 
+// Search with smooth filter animation
 searchInput.addEventListener("input", (e) => {
   currentSearch = e.target.value.toLowerCase().trim();
-  render();
+  // Smooth transition
+  list.style.transition = "opacity 200ms ease";
+  list.style.opacity = "0.6";
+  
+  setTimeout(() => {
+    render();
+    list.style.opacity = "1";
+  }, 100);
 });
 
+// Add with premium button interaction
 addBtn.addEventListener("click", async () => {
   const title = titleInput.value.trim();
   const amt = Number(amountInput.value);
   const cat = categoryInput.value;
   if (!title || !amt || amt <= 0) {
-    titleInput.style.animation = "shake .4s";
-    amountInput.style.animation = "shake .4s";
-    setTimeout(()=>{ titleInput.style.animation=""; amountInput.style.animation=""; }, 400);
+    // Shake animation
+    titleInput.style.animation = "shake 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)";
+    amountInput.style.animation = "shake 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)";
+    setTimeout(()=>{ 
+      titleInput.style.animation=""; 
+      amountInput.style.animation=""; 
+    }, 300);
     return;
   }
+
+  // Button micro-interaction
+  addBtn.style.transform = "scale(0.95)";
+  addBtn.style.transition = "transform 100ms cubic-bezier(0.34, 1.56, 0.64, 1)";
+  
+  setTimeout(() => {
+    addBtn.style.transform = "scale(1)";
+  }, 100);
 
   const user = await getUser();
   if (user) {
@@ -56,8 +88,10 @@ addBtn.addEventListener("click", async () => {
     if (!error && data) {
       expenses.unshift({ id: data[0].id, title, amount: amt, category: cat, createdAt: Date.now() });
       localStorage.setItem("expenses", JSON.stringify(expenses));
-      titleInput.value = ""; amountInput.value = "";
+      titleInput.value = ""; 
+      amountInput.value = "";
       render();
+      reportActivity(`Spent ₹${formatNumber(amt)} on ${title}`, "💳");
       return;
     }
   }
@@ -65,16 +99,24 @@ addBtn.addEventListener("click", async () => {
   // fallback local
   expenses.unshift({ id: Date.now(), title, amount: amt, category: cat, createdAt: Date.now() });
   localStorage.setItem("expenses", JSON.stringify(expenses));
-  titleInput.value = ""; amountInput.value = "";
+  titleInput.value = ""; 
+  amountInput.value = "";
   render();
+  reportActivity(`Spent ₹${formatNumber(amt)} on ${title}`, "💳");
 });
 
+// List events with smooth delete animation
 list.addEventListener("click", async (e) => {
   if (!e.target.classList.contains("delete-btn")) return;
   const id = e.target.dataset.id;
   const user = await getUser();
   const li = e.target.closest("li");
-  li.style.opacity = "0.0";
+  const expTitle = li.querySelector(".expense-title").textContent;
+  const expAmount = li.querySelector(".expense-amount").textContent;
+  
+  // Premium delete animation
+  li.style.animation = "expenseDelete 300ms cubic-bezier(0.2, 0.8, 0.2, 1)";
+  
   setTimeout(async () => {
     if (user) {
       await supabase.from("expenses").delete().eq("id", id).eq("user_id", user.id);
@@ -82,9 +124,11 @@ list.addEventListener("click", async (e) => {
     expenses = expenses.filter(x => String(x.id) !== String(id));
     localStorage.setItem("expenses", JSON.stringify(expenses));
     render();
-  }, 260);
+    reportActivity(`Deleted: ${expTitle} ${expAmount}`, "🗑️");
+  }, 300);
 });
 
+// Render with staggered animations
 function render() {
   list.innerHTML = "";
   const filtered = expenses.filter(exp => {
@@ -93,14 +137,15 @@ function render() {
   });
 
   if (filtered.length === 0) {
-    list.innerHTML = `<li class="empty-state">No expenses yet</li>`;
+    list.innerHTML = `<li class="empty-state" style="opacity: 0; animation: fadeIn 400ms ease 100ms both;">No expenses yet</li>`;
     updateTotals([]);
     return;
   }
 
-  filtered.forEach(exp => {
+  filtered.forEach((exp, idx) => {
     const li = document.createElement("li");
     li.className = "expense-item-wrapper";
+    li.style.setProperty('--stagger-delay', `${idx * 60}ms`);
     li.innerHTML = `
       <div style="display:flex;gap:12px;align-items:center">
         <div class="expense-details">
@@ -119,10 +164,39 @@ function render() {
   updateTotals(filtered);
 }
 
+// Update totals with smooth animation
 function updateTotals(src) {
   const total = src.reduce((s,e) => s + Number(e.amount), 0);
-  totalExpEl.textContent = formatNumber(total);
-  expenseCountEl.textContent = src.length;
+  
+  // Animate total amount change
+  animateNumberChange(totalExpEl, formatNumber(total));
+  
+  // Animate expense count
+  if (expenseCountEl.textContent !== String(src.length)) {
+    expenseCountEl.style.transition = "all 300ms cubic-bezier(0.25, 0.8, 0.3, 1)";
+    expenseCountEl.style.opacity = "0.5";
+    expenseCountEl.style.transform = "scale(0.8)";
+    
+    setTimeout(() => {
+      expenseCountEl.textContent = src.length;
+      expenseCountEl.style.opacity = "1";
+      expenseCountEl.style.transform = "scale(1)";
+    }, 150);
+  }
+}
+
+function animateNumberChange(el, newValue) {
+  if (el.textContent !== newValue) {
+    el.style.transition = "all 300ms cubic-bezier(0.25, 0.8, 0.3, 1)";
+    el.style.opacity = "0.5";
+    el.style.transform = "scale(0.8)";
+    
+    setTimeout(() => {
+      el.textContent = newValue;
+      el.style.opacity = "1";
+      el.style.transform = "scale(1)";
+    }, 150);
+  }
 }
 
 function formatNumber(n){ return Number(n).toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:2}); }
