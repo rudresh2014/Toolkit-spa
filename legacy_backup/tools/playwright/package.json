@@ -1,0 +1,12 @@
+{
+  "name": "tootkit-playwright-tests",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:screenshots": "playwright test --project=chromium --project=firefox --project=webkit"
+  }
+}

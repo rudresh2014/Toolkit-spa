@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b1020" />
+
+  <title>Toolkit — To-Do & Expense</title>
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Supabase session redirect (no service worker / no manifest) -->
+  <script type="module">
+    import { supabase } from "/supabaseClient.js";
+
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
+      window.location.href = "/apps/auth/auth.html";
+    }
+  </script>
+</head>
+
+<body>
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <main class="spa-root">
+
+    <!-- HOME SCREEN -->
+    <section id="home" class="home-screen">
+      <div class="glass-wrapper" role="region">
+
+        <!-- Greeting + Clock -->
+        <div class="top-row">
+          <div class="greeting-col">
+            <div id="greeting" class="greeting">Good Evening</div>
+            <div id="username" class="username">Loading…</div>
+          </div>
+
+          <div class="clock-col">
+            <div id="dateDisplay" class="date-display">—</div>
+            <div id="timeDisplay" class="time-display">—</div>
+          </div>
+        </div>
+
+        <header class="home-header">
+          <h1 class="brand">✨ Your Toolkit</h1>
+          <p class="subtitle">Ultra-Smooth • Beautifully Crafted • Pro-Grade</p>
+        </header>
+
+        <!-- Notes + Activity -->
+        <div class="controls-row">
+
+          <div class="notes">
+            <h3>📝 Quick Notes</h3>
+            <textarea id="notesInput" class="notes-input" rows="3" placeholder="Capture your thoughts..."></textarea>
+
+            <div class="notes-actions">
+              <button id="notesClear" class="btn small">Clear</button>
+              <span id="notesCount">0 characters</span>
+            </div>
+          </div>
+
+          <div class="activity">
+            <div class="activity-header">
+              <h3>⚡ Recent Activity</h3>
+              <button id="activityClear" class="btn small">Clear</button>
+            </div>
+            <div id="activityFeed" class="activity-feed"></div>
+          </div>
+
+        </div>
+
+        <!-- Tiles -->
+        <div class="tiles premium-grid">
+
+          <button class="tile glass-tile" data-app="todo">
+            <div class="tile-inner">
+              <div class="tile-icon">📋</div>
+              <div class="tile-title">To-Do Master</div>
+              <div class="tile-desc">Organize • Plan • Execute</div>
+            </div>
+          </button>
+
+          <button class="tile glass-tile" data-app="expense">
+            <div class="tile-inner">
+              <div class="tile-icon">💸</div>
+              <div class="tile-title">Expense Hub</div>
+              <div class="tile-desc">Track • Analyze • Optimize</div>
+            </div>
+          </button>
+
+        </div>
+
+        <footer class="home-foot">
+          <small>🚀 Crafted with love by Rudresh 🚀</small>
+          <button id="logoutBtn" class="btn tiny">Logout</button>
+        </footer>
+
+      </div>
+    </section>
+
+    <!-- APP VIEW -->
+    <section id="app-view" class="app-view hidden">
+      <iframe id="app-frame" class="app-frame"></iframe>
+      <button id="backBtn" class="back-btn">← Back</button>
+    </section>
+
+    <div id="loader" class="loader hidden">Loading…</div>
+
+  </main>
+
+  <script type="module" src="/home.js"></script>
+  <script type="module" src="/router.js"></script>
+
+</body>
+</html>
