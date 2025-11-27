@@ -6,8 +6,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Card, CardContent, CardFooter } from "../components/ui/card";
 import { Loader2 } from "lucide-react";
-
-import { GlowingOrb } from "../components/ui/glowing-orb";
+import { AnimatedLogo } from "../components/ui/animated-logo";
 
 export default function Signup() {
     const [email, setEmail] = useState("");
@@ -43,11 +42,12 @@ export default function Signup() {
     };
 
     return (
-        <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-            <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r overflow-hidden">
+        <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-zinc-900">
+            <div className="relative hidden h-full flex-col p-10 text-white lg:flex overflow-hidden">
                 <div className="absolute inset-0 bg-zinc-900" />
-                <GlowingOrb />
-                <div className="relative z-20 flex items-center text-lg font-medium">
+
+                {/* Top Logo */}
+                <div className="relative z-20 flex items-center text-2xl font-medium">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -60,8 +60,15 @@ export default function Signup() {
                     >
                         <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
                     </svg>
-                    Toolkit Inc
+                    Toolkit
                 </div>
+
+                {/* Centered Animated Element */}
+                <div className="relative z-20 flex flex-1 items-center justify-center">
+                    <AnimatedLogo />
+                </div>
+
+                {/* Bottom Quote */}
                 <div className="relative z-20 mt-auto">
                     <blockquote className="space-y-2">
                         <p className="text-lg">
@@ -74,9 +81,21 @@ export default function Signup() {
                 </div>
             </div>
             <div className="lg:p-8">
-                <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+                <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] text-white">
                     <div className="flex flex-col space-y-2 text-center">
-                        <h1 className="text-2xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight flex flex-col items-center justify-center gap-2">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="h-6 w-6"
+                            >
+                                <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+                            </svg>
                             Create an account
                         </h1>
                         <p className="text-sm text-muted-foreground">
@@ -84,7 +103,7 @@ export default function Signup() {
                         </p>
                     </div>
 
-                    <Card className="border-0 shadow-none">
+                    <Card className="border-0 shadow-none bg-transparent">
                         <CardContent className="grid gap-4 p-0">
                             <form onSubmit={handleSignup}>
                                 <div className="grid gap-4">
@@ -100,6 +119,7 @@ export default function Signup() {
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
+                                            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-muted-foreground"
                                         />
                                     </div>
                                     <div className="grid gap-2">
@@ -113,6 +133,7 @@ export default function Signup() {
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
+                                            className="bg-zinc-800 border-zinc-700 text-white placeholder:text-muted-foreground"
                                         />
                                     </div>
                                     {error && (
@@ -120,7 +141,7 @@ export default function Signup() {
                                             {error}
                                         </div>
                                     )}
-                                    <Button disabled={loading}>
+                                    <Button disabled={loading} className="bg-white text-black hover:bg-zinc-200">
                                         {loading && (
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                         )}
@@ -132,7 +153,7 @@ export default function Signup() {
                         <CardFooter className="flex flex-col space-y-4 p-0 mt-4">
                             <div className="text-sm text-muted-foreground text-center">
                                 Already have an account?{" "}
-                                <Link to="/login" className="underline underline-offset-4 hover:text-primary">
+                                <Link to="/login" className="underline underline-offset-4 hover:text-white">
                                     Login
                                 </Link>
                             </div>
