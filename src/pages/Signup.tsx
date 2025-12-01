@@ -36,7 +36,7 @@ export default function Signup() {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signUp({
+        const { error: authError } = await supabase.auth.signUp({
             email,
             password,
             options: {
@@ -46,8 +46,8 @@ export default function Signup() {
             },
         });
 
-        if (error) {
-            setError(error.message);
+        if (authError) {
+            setError(authError.message);
             setLoading(false);
         } else {
             // Show success message or redirect
@@ -120,6 +120,11 @@ export default function Signup() {
 
                     <Card className="border-0 shadow-none bg-transparent">
                         <CardContent className="grid gap-4 p-0">
+                            {error && (
+                                <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-2 rounded-md text-sm">
+                                    {error}
+                                </div>
+                            )}
                             <form onSubmit={handleSignup}>
                                 <div className="grid gap-4">
                                     <div className="grid gap-2">
@@ -163,8 +168,8 @@ export default function Signup() {
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                             className={`bg-zinc-800 border-zinc-700 text-white placeholder:text-muted-foreground transition-all duration-300 pr-10 ${password && /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_-])[A-Za-z\d@$!%*#?&^_-]{6,}$/.test(password)
-                                                    ? "border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"
-                                                    : ""
+                                                ? "border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"
+                                                : ""
                                                 }`}
                                         />
                                         <Button

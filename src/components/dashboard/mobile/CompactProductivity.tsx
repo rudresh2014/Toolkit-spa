@@ -6,7 +6,7 @@ type CompactProductivityProps = {
     trend?: 'up' | 'down' | 'same';
 };
 
-export function CompactProductivity({ score, trend }: CompactProductivityProps) {
+export function CompactProductivity({ score }: CompactProductivityProps) {
     return (
         <Card>
             <CardHeader className="py-3">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../lib/supabase";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Card, CardContent } from "../../components/ui/card";
 import { WeekOverviewChips } from "../../components/dashboard/WeekOverviewChips";
 import { TodayGlance } from "../../components/dashboard/TodayGlance";
 import { SevenDayHeatmap } from "../../components/dashboard/SevenDayHeatmap";
@@ -198,10 +198,10 @@ export default function MobileDashboard() {
                         {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                     </p>
                 </div>
-                {weather?.data && (
+                {weather && (
                     <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-full">
                         <CloudSun className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium">{Math.round(weather.data.main.temp)}°</span>
+                        <span className="text-sm font-medium">{Math.round(weather.main.temp)}°</span>
                     </div>
                 )}
             </div>
