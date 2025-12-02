@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
+// import { Button } from "../components/ui/button";
 import { Laptop, Smartphone } from "lucide-react";
 
 export default function ChooseExperience() {
@@ -19,22 +19,20 @@ export default function ChooseExperience() {
                     <p className="text-muted-foreground">Select how you want to view the dashboard</p>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                    <Button
-                        variant="outline"
-                        className="h-24 text-lg flex flex-col gap-2 hover:bg-primary/5 hover:border-primary"
+                    <button
+                        className="h-24 w-full text-lg flex flex-col items-center justify-center gap-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95 transition-transform duration-100"
                         onClick={() => handleSelect('web')}
                     >
                         <Laptop className="h-8 w-8" />
                         Web Version
-                    </Button>
-                    <Button
-                        variant="outline"
-                        className="h-24 text-lg flex flex-col gap-2 hover:bg-primary/5 hover:border-primary"
+                    </button>
+                    <button
+                        className="h-24 w-full text-lg flex flex-col items-center justify-center gap-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95 transition-transform duration-100"
                         onClick={() => handleSelect('mobile')}
                     >
                         <Smartphone className="h-8 w-8" />
                         Mobile Version
-                    </Button>
+                    </button>
                 </CardContent>
             </Card>
         </div>

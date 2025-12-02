@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../lib/supabase";
 import { Card, CardContent } from "../../components/ui/card";
-import { WeekOverviewChips } from "../../components/dashboard/WeekOverviewChips";
+// import { WeekOverviewChips } from "../../components/dashboard/WeekOverviewChips";
 import { TodayGlance } from "../../components/dashboard/TodayGlance";
 import { SevenDayHeatmap } from "../../components/dashboard/SevenDayHeatmap";
 import { MonthlyProjection } from "../../components/dashboard/MonthlyProjection";
@@ -19,6 +19,7 @@ export default function MobileDashboard() {
 
     // State
     const [loading, setLoading] = useState(true);
+    const [displayName, setDisplayName] = useState<string>("");
     const [stats, setStats] = useState({
         tasksCompletedWeek: 0,
         habitsCompletedWeek: 0,
@@ -44,8 +45,28 @@ export default function MobileDashboard() {
     useEffect(() => {
         if (user) {
             fetchDashboardData();
+            fetchProfile();
         }
     }, [user]);
+
+    const fetchProfile = async () => {
+        if (!user) return;
+        try {
+            const { data } = await supabase
+                .from('profiles')
+                .select('display_name')
+                .eq('id', user.id)
+                .single();
+
+            if (data && data.display_name) {
+                setDisplayName(data.display_name);
+            } else {
+                setDisplayName(user.email?.split('@')[0] || "User");
+            }
+        } catch (e) {
+            setDisplayName(user?.email?.split('@')[0] || "User");
+        }
+    };
 
     const fetchDashboardData = async () => {
         try {
@@ -190,19 +211,19 @@ export default function MobileDashboard() {
     }
 
     return (
-        <div className="space-y-4 pb-24">
+        <div className="space-y-3 pb-24">
             {/* 1. Header */}
-            <div className="flex justify-between items-center pt-2">
+            <div className="flex justify-between items-center pt-2 px-1">
                 <div>
-                    <h1 className="text-xl font-bold">Hello, {user?.email?.split('@')[0]}</h1>
-                    <p className="text-xs text-muted-foreground">
+                    <h1 className="text-lg font-bold">Hello, {displayName}</h1>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
                         {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                     </p>
                 </div>
                 {weather && (
-                    <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-full">
-                        <CloudSun className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium">{Math.round(weather.main.temp)}°</span>
+                    <div className="flex items-center gap-1.5 bg-secondary/50 px-2 py-1 rounded-full">
+                        <CloudSun className="h-3.5 w-3.5 text-primary" />
+                        <span className="text-xs font-medium">{Math.round(weather.main.temp)}°</span>
                     </div>
                 )}
             </div>
@@ -216,43 +237,38 @@ export default function MobileDashboard() {
                 todayExpenses={stats.todayExpenses}
             />
 
-            {/* Week Overview Chips - Temporarily commented out if causing issues, but keeping it for now */}
-            <WeekOverviewChips
-                tasksCompleted={stats.tasksCompletedWeek}
-                habitsCompleted={stats.habitsCompletedWeek}
-                weeklyExpenses={stats.weeklyExpenses}
-            />
-
-            {/* 3. Habits Overview (2x2 Grid) */}
-            <div className="grid grid-cols-2 gap-3">
-                <Card className="bg-primary/5 border-primary/20">
-                    <CardContent className="p-3 flex flex-col items-center justify-center text-center h-full">
-                        <Trophy className="h-5 w-5 text-primary mb-1" />
-                        <span className="text-xs text-muted-foreground">Total Habits</span>
-                        <span className="text-lg font-bold">{stats.habitStats.total}</span>
-                    </CardContent>
-                </Card>
-                <Card className="bg-primary/5 border-primary/20">
-                    <CardContent className="p-3 flex flex-col items-center justify-center text-center h-full">
-                        <CheckCircle2 className="h-5 w-5 text-primary mb-1" />
-                        <span className="text-xs text-muted-foreground">Done Today</span>
-                        <span className="text-lg font-bold">{stats.habitStats.completedToday}</span>
-                    </CardContent>
-                </Card>
-                <Card className="bg-primary/5 border-primary/20">
-                    <CardContent className="p-3 flex flex-col items-center justify-center text-center h-full">
-                        <Flame className="h-5 w-5 text-primary mb-1" />
-                        <span className="text-xs text-muted-foreground">Streak</span>
-                        <span className="text-lg font-bold">{stats.habitStats.streak}</span>
-                    </CardContent>
-                </Card>
-                <Card className="bg-primary/5 border-primary/20">
-                    <CardContent className="p-3 flex flex-col items-center justify-center text-center h-full">
-                        <Calendar className="h-5 w-5 text-primary mb-1" />
-                        <span className="text-xs text-muted-foreground">Best Day</span>
-                        <span className="text-lg font-bold">{stats.habitStats.bestDay.substring(0, 3)}</span>
-                    </CardContent>
-                </Card>
+            {/* 3. Habits Overview (Vertical Stack) */}
+            <div className="space-y-2">
+                <div className="flex gap-2">
+                    <Card className="flex-1 bg-primary/5 border-primary/20">
+                        <CardContent className="p-2 flex flex-col items-center justify-center text-center h-full">
+                            <Trophy className="h-4 w-4 text-primary mb-0.5" />
+                            <span className="text-[10px] text-muted-foreground">Total</span>
+                            <span className="text-base font-bold leading-none">{stats.habitStats.total}</span>
+                        </CardContent>
+                    </Card>
+                    <Card className="flex-1 bg-primary/5 border-primary/20">
+                        <CardContent className="p-2 flex flex-col items-center justify-center text-center h-full">
+                            <CheckCircle2 className="h-4 w-4 text-primary mb-0.5" />
+                            <span className="text-[10px] text-muted-foreground">Done</span>
+                            <span className="text-base font-bold leading-none">{stats.habitStats.completedToday}</span>
+                        </CardContent>
+                    </Card>
+                    <Card className="flex-1 bg-primary/5 border-primary/20">
+                        <CardContent className="p-2 flex flex-col items-center justify-center text-center h-full">
+                            <Flame className="h-4 w-4 text-primary mb-0.5" />
+                            <span className="text-[10px] text-muted-foreground">Streak</span>
+                            <span className="text-base font-bold leading-none">{stats.habitStats.streak}</span>
+                        </CardContent>
+                    </Card>
+                    <Card className="flex-1 bg-primary/5 border-primary/20">
+                        <CardContent className="p-2 flex flex-col items-center justify-center text-center h-full">
+                            <Calendar className="h-4 w-4 text-primary mb-0.5" />
+                            <span className="text-[10px] text-muted-foreground">Best</span>
+                            <span className="text-base font-bold leading-none">{stats.habitStats.bestDay.substring(0, 3)}</span>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
 
             {/* 4. 7-Day Habit Heatmap */}
